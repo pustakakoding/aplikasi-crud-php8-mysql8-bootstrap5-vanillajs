@@ -1,0 +1,143 @@
+body {
+    font-family: poppins, sans-serif;
+    background: #f9fbfd;
+    color: #34364a;
+}
+
+.bg-primary {
+    background-color: #435ebe !important;
+}
+
+.icon-title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #34364a;
+    border: 2px solid #34364a;
+    width: 18px;
+    height: 18px;
+    padding: 14px;
+    font-size: 18px;
+    border-radius: 41%;
+    margin-right: 12px;
+    margin-bottom: 8px;
+}
+
+.breadcrumb .breadcrumb-item a:hover {
+    color: #435ebe !important;
+    text-decoration: none;
+}
+
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #435ebe;
+    --bs-btn-border-color: #435ebe;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #3950a2;
+    --bs-btn-hover-border-color: #364b98;
+    --bs-btn-focus-shadow-rgb: 49, 132, 253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #364b98;
+    --bs-btn-active-border-color: #364b98;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #435ebe;
+    --bs-btn-disabled-border-color: #435ebe;
+}
+
+.table {
+    --bs-table-striped-bg: #f9f9f9;
+}
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+    border-color: #f9f9f9;
+    border-style: solid;
+    border-width: 0;
+}
+
+.form-search input {
+    border-color: #ced4da;
+    padding: 0.5rem 1.5rem;
+    padding-right: calc(2em + 1.2rem);
+    background-image: url(../img/search-icon.svg);
+    background-repeat: no-repeat;
+    background-position: right calc(1em + 0.3rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-search .was-validated .form-control:invalid,
+.form-control.is-invalid {
+    border-color: #dc3545;
+    padding-right: calc(2em + 1.2rem);
+    background-image: url(../img/search-icon.svg);
+    background-repeat: no-repeat;
+    background-position: right calc(1em + 0.3rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.form-search .was-validated .form-control:valid,
+.form-control.is-valid {
+    border-color: #28a745;
+    padding-right: calc(2em + 1.2rem);
+    background-image: url(../img/search-icon.svg);
+    background-repeat: no-repeat;
+    background-position: right calc(1em + 0.3rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+.flatpickr-day {
+    border-radius: 15px;
+}
+
+.pagination-pill .page-link {
+    display: flex;
+    border-radius: 41% !important;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    color: #6c757d;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+        border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.page-link:hover {
+    color: #435ebe;
+    text-decoration: none;
+    background-color: #fff;
+    border: 2px solid #435ebe;
+}
+
+.page-item .page-link {
+    margin: 0 7px;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    font-weight: 500;
+    background-color: #435ebe;
+}
+
+.footer .copyright a {
+    color: #ee5050;
+    text-decoration: none;
+}
+
+.footer .copyright a:hover {
+    color: #eb2d2d;
+}
