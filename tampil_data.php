@@ -72,7 +72,7 @@ if (isset($_GET['pesan'])) {
     // jika data "paginasi" ada, maka paginasi halaman = data "paginasi". jika data "paginasi" tidak ada, maka paginasi halaman = 1
     $paginasi_halaman = (isset($_GET['paginasi'])) ? (int) $_GET['paginasi'] : 1;
     // tentukan jumlah data yang ditampilkan per paginasi halaman
-    $batas = 5;
+    $batas = 10;
     // tentukan dari data ke berapa yang akan ditampilkan pada paginasi halaman
     $batas_awal = ($paginasi_halaman - 1) * $batas;
 
