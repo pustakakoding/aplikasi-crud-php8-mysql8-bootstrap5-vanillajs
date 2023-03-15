@@ -39,5 +39,6 @@ Membuat desain tampilan aplikasi menggunakan CSS Bootstrap 5.
 
 9. Validasi Form Input, 
 Membuat fungsi untuk validasi form input wajib diisi dan membatasi karakter yang diinputkan (bisa diinputkan huruf, angka atau karakter tertentu saja).
-Keamanan dasar untuk mencegah SQL injection
+
+10. Keamanan dasar untuk mencegah SQL injection, 
 Membuat keamanan dasar untuk mencegah SQL injection saat proses input data. Menghilangkan spasi di belakang dan di depan data yang diinputkan.
