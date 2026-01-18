@@ -1,3 +1,8 @@
+<?php
+// Deklarasi strict types
+declare(strict_types=1);
+?>
+
 <div class="d-flex flex-column flex-lg-row mt-5 mb-4">
     <!-- judul halaman -->
     <div class="flex-grow-1 d-flex align-items-center">
@@ -24,7 +29,7 @@ if (isset($_GET['id'])) {
 
     // sql statement untuk menampilkan data dari tabel "tbl_siswa" berdasarkan "id_siswa"
     $query = $mysqli->query("SELECT * FROM tbl_siswa WHERE id_siswa='$id_siswa'")
-                             or die('Ada kesalahan pada query tampil data : ' . $mysqli->error);
+                            or die("Ada kesalahan pada query tampil data : {$mysqli->error}");
     // ambil data hasil query
     $data = $query->fetch_assoc();
 }
@@ -39,7 +44,7 @@ if (isset($_GET['id'])) {
     <div class="d-flex flex-column flex-xl-row">
         <div class="flex-shrink-0 text-center mb-5 mb-xl-0">
             <div class="foto-profil-detail">
-                <img src="images/<?php echo $data['foto_profil']; ?>" class="border border-2 img-fluid rounded-4 shadow" alt="Foto Profil" width="240" height="240">
+                <img src="images/<?= basename($data['foto_profil']) ?>" class="border border-2 img-fluid rounded-4 shadow" alt="Foto Profil" width="240" height="240" loading="lazy">
             </div>
         </div>
         <div class="flex-grow-1 text-muted fw-light ms-xl-5">
@@ -48,42 +53,42 @@ if (isset($_GET['id'])) {
                     <tr>
                         <td width="200">ID Siswa</td>
                         <td width="10">:</td>
-                        <td><?php echo $data['id_siswa']; ?></td>
+                        <td><?= $data['id_siswa'] ?></td>
                     </tr>
                     <tr>
                         <td>Tanggal Daftar</td>
                         <td>:</td>
-                        <td><?php echo tanggal_indo($data['tanggal_daftar']); ?></td>
+                        <td><?= tanggal_id($data['tanggal_daftar']) ?></td>
                     </tr>
                     <tr>
                         <td>Kelas</td>
                         <td>:</td>
-                        <td><?php echo $data['kelas']; ?></td>
+                        <td><?= $data['kelas'] ?></td>
                     </tr>
                     <tr>
                         <td>Nama Lengkap</td>
                         <td>:</td>
-                        <td><?php echo $data['nama_lengkap']; ?></td>
+                        <td><?= $data['nama_lengkap'] ?></td>
                     </tr>
                     <tr>
                         <td>Jenis Kelamin</td>
                         <td>:</td>
-                        <td><?php echo $data['jenis_kelamin']; ?></td>
+                        <td><?= $data['jenis_kelamin'] ?></td>
                     </tr>
                     <tr>
                         <td>Alamat</td>
                         <td>:</td>
-                        <td><?php echo $data['alamat']; ?></td>
+                        <td><?= $data['alamat'] ?></td>
                     </tr>
                     <tr>
                         <td>Email</td>
                         <td>:</td>
-                        <td><?php echo $data['email']; ?></td>
+                        <td><?= $data['email'] ?></td>
                     </tr>
                     <tr>
                         <td>WhatsApp</td>
                         <td>:</td>
-                        <td><?php echo $data['whatsapp']; ?></td>
+                        <td><?= $data['whatsapp'] ?></td>
                     </tr>
                 </table>
             </div>

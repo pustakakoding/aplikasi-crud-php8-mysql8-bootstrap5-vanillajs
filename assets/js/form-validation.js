@@ -1,58 +1,64 @@
-// Fungsi untuk validasi form dengan menonaktifkan pengiriman form jika ada field yang kosong
+// Fungsi untuk validasi form dengan menonaktifkan pengiriman form jika ada field yang tidak valid
 (() => {
-    'use strict'
+    "use strict";
 
     // ambil semua form yang ingin diterapkan fungsi validasi
-    const forms = document.querySelectorAll('.needs-validation')
+    const forms = document.querySelectorAll(".needs-validation");
 
     // berikan keterangan pada form dan cegah pengiriman form
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-            }
+    Array.from(forms).forEach((form) => {
+        form.addEventListener(
+            "submit",
+            (event) => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
 
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
+                form.classList.add("was-validated");
+            },
+            false
+        );
+    });
+})();
 
-// Fungsi untuk validasi karakter yang boleh diinpukan pada form
-function getkey(e) {
-    if (window.event)
-        return window.event.keyCode;
-    else if (e)
-        return e.which;
-    else
-        return null;
-}
+/**
+ * Validasi karakter input
+ * @param {KeyboardEvent} e - Event keyboard
+ * @param {string} allowedChars - Daftar karakter yang diizinkan
+ * @returns {boolean}
+ */
+function allowChars(e, allowedChars) {
+    // Dapatkan karakter yang ditekan
+    const key = e.key;
 
-function goodchars(e, goods, field) {
-    var key, keychar;
-    key = getkey(e);
-    if (key == null) return true;
-
-    keychar = String.fromCharCode(key);
-    keychar = keychar.toLowerCase();
-    goods = goods.toLowerCase();
-
-    // check goodkeys
-    if (goods.indexOf(keychar) != -1)
+    // Izinkan tombol kontrol
+    if (
+        e.ctrlKey ||
+        e.metaKey ||
+        ['Backspace', 'Tab', 'Escape', 'ArrowLeft', 'ArrowRight', 'Delete'].includes(key)
+    ) {
         return true;
-    // control keys
-    if (key == null || key == 0 || key == 8 || key == 9 || key == 27)
-        return true;
+    }
 
-    if (key == 13) {
-        var i;
-        for (i = 0; i < field.form.elements.length; i++)
-            if (field == field.form.elements[i])
-                break;
-        i = (i + 1) % field.form.elements.length;
-        field.form.elements[i].focus();
+    // Enter → pindah ke input berikutnya
+    if (key === 'Enter') {
+        e.preventDefault(); // Mencegah submit form
+        const form = e.target.form;
+        if (!form) return false;
+
+        const elements = Array.from(form.elements).filter(el => !el.disabled);
+        const index = elements.indexOf(e.target);
+        const next = elements[index + 1] || elements[0];
+        next.focus();
         return false;
-    };
-    // else return false
-    return false;
+    }
+
+    // Validasi karakter
+    if (!allowedChars.toLowerCase().includes(key.toLowerCase())) {
+        e.preventDefault();
+        return false;
+    }
+
+    return true;
 }

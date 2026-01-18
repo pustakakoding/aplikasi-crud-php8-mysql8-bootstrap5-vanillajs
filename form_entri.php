@@ -1,3 +1,8 @@
+<?php
+// Deklarasi strict types
+declare(strict_types=1);
+?>
+
 <div class="d-flex flex-column flex-lg-row mt-5 mb-4">
     <!-- judul halaman -->
     <div class="flex-grow-1 d-flex align-items-center">
@@ -28,33 +33,23 @@
                 <div class="row g-0">
                     <div class="mb-3 col-xl-6 pe-xl-3">
                         <?php
-                        // membuat "id_siswa"
+                        /**
+                         * Generate ID Siswa otomatis dengan format ID-XXXXX
+                         */
                         // sql statement untuk menampilkan 5 digit terakhir dari "id_siswa" pada tabel "tbl_siswa"
-                        $query = $mysqli->query("SELECT RIGHT(id_siswa,5) as nomor FROM tbl_siswa ORDER BY id_siswa DESC LIMIT 1")
-                                                 or die('Ada kesalahan pada query tampil data : ' . $mysqli->error);
-                        // ambil jumlah baris data hasil query
-                        $rows = $query->num_rows;
+                        $query = $mysqli->query("SELECT MAX(RIGHT(id_siswa, 5)) as nomor FROM tbl_siswa")
+                                                or die("Ada kesalahan pada query tampil data : {$mysqli->error}");
+                        $data = $query->fetch_assoc();
 
-                        // cek hasil query
-                        // jika "id_siswa" sudah ada
-                        if ($rows <> 0) {
-                            // ambil data hasil query
-                            $data = $query->fetch_assoc();
-                            // nomor urut "id_siswa" yang terakhir + 1
-                            $nomor_urut = $data['nomor'] + 1;
-                        }
-                        // jika "id_siswa" belum ada
-                        else {
-                            // nomor urut "id_siswa" = 1
-                            $nomor_urut = 1;
-                        }
+                        // Jika nomor tidak null, tambahkan 1. Jika null (tabel kosong), mulai dari 1.
+                        $nomor_urut = ($data['nomor'] !== null) ? (int)$data['nomor'] + 1 : 1;
 
                         // menambahkan karakter "ID-" diawal dan karakter "0" disebelah kiri nomor urut
-                        $id_siswa = "ID-" . str_pad($nomor_urut, 5, "0", STR_PAD_LEFT);
+                        $id_siswa = "ID-" . str_pad((string)$nomor_urut, 5, "0", STR_PAD_LEFT);
                         ?>
                         <label class="form-label">ID Siswa <span class="text-danger">*</span></label>
                         <!-- tampilkan "id_siswa" -->
-                        <input type="text" name="id_siswa" class="form-control" value="<?php echo $id_siswa; ?>" readonly>
+                        <input type="text" name="id_siswa" class="form-control" value="<?= $id_siswa ?>" readonly>
                     </div>
 
                     <div class="mb-3 col-xl-6 pe-xl-3">
@@ -95,14 +90,16 @@
                 <div class="mb-4 pe-xl-3">
                     <label class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
                     <br>
-                    <div class="form-check form-check-inline">
-                        <input type="radio" id="laki_laki" name="jenis_kelamin" class="form-check-input" value="Laki-laki" required>
-                        <label class="form-check-label" for="laki_laki">Laki-laki</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input type="radio" id="perempuan" name="jenis_kelamin" class="form-check-input" value="Perempuan" required>
-                        <label class="form-check-label" for="perempuan">Perempuan</label>
-                        <div class="invalid-feedback invalid-feedback-inline">Pilih salah satu jenis kelamin.</div>
+                    <div class="d-flex">
+                        <div class="form-check me-4">
+                            <input type="radio" id="laki_laki" name="jenis_kelamin" class="form-check-input" value="Laki-laki" required>
+                            <label class="form-check-label" for="laki_laki">Laki-laki</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" id="perempuan" name="jenis_kelamin" class="form-check-input" value="Perempuan" required>
+                            <label class="form-check-label" for="perempuan">Perempuan</label>
+                            <div class="invalid-feedback invalid-feedback-inline">Pilih salah satu jenis kelamin.</div>
+                        </div>
                     </div>
                 </div>
 
@@ -120,7 +117,7 @@
 
                 <div class="mb-3 pe-xl-3">
                     <label class="form-label">WhatsApp <span class="text-danger">*</span></label>
-                    <input type="text" name="whatsapp" class="form-control" maxlength="13" autocomplete="off" onKeyPress="return goodchars(event,'0123456789',this)" required>
+                    <input type="text" name="whatsapp" class="form-control" maxlength="13" autocomplete="off" onkeydown="return allowChars(event, '0123456789')" required>
                     <div class="invalid-feedback">WhatsApp tidak boleh kosong.</div>
                 </div>
             </div>
@@ -128,11 +125,11 @@
             <div class="col-xl-6">
                 <div class="mb-3 ps-xl-3">
                     <label class="form-label">Foto Profil <span class="text-danger">*</span></label>
-                    <input type="file" accept=".jpg, .jpeg, .png" id="foto" name="foto" class="form-control" autocomplete="off" required>
+                    <input type="file" accept=".jpg, .jpeg, .png" id="image" name="foto" class="form-control" autocomplete="off" required>
                     <div class="invalid-feedback">Foto profil tidak boleh kosong.</div>
 
                     <div class="mt-4">
-                        <img id="preview_foto" src="images/img-default.png" class="border border-2 img-fluid rounded-4 shadow-sm" alt="Foto Profil" width="240" height="240">
+                        <img id="preview-image" src="images/img-default.png" class="border border-2 img-fluid rounded-4 shadow-sm" alt="Foto Profil" width="240" height="240" loading="lazy">
                     </div>
 
                     <div class="form-text mt-4">
@@ -154,43 +151,3 @@
         </div>
     </form>
 </div>
-
-<script type="text/javascript">
-    // validasi file dan preview file sebelum diunggah
-    document.getElementById('foto').onchange = function() {
-        // mengambil value dari file
-        var fileInput = document.getElementById('foto');
-        var filePath = fileInput.value;
-        var fileSize = fileInput.files[0].size;
-        // tentukan extension file yang diperbolehkan
-        var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-
-        // Jika tipe file yang diunggah tidak sesuai dengan "allowedExtensions"
-        if (!allowedExtensions.exec(filePath)) {
-            alert("Tipe file tidak sesuai. Harap unggah file yang memiliki tipe *.jpg atau *.png.");
-            // reset input file
-            fileInput.value = "";
-            // tampilkan file default
-            document.getElementById("preview_foto").src = "images/img-default.png";
-        }
-        // jika ukuran file yang diunggah lebih dari 1 Mb
-        else if (fileSize > 1000000) {
-            alert("Ukuran file lebih dari 1 Mb. Harap unggah file yang memiliki ukuran maksimal 1 Mb.");
-            // reset input file
-            fileInput.value = "";
-            // tampilkan file default
-            document.getElementById("preview_foto").src = "images/img-default.png";
-        }
-        // jika file yang diunggah sudah sesuai, tampilkan preview file
-        else {
-            var reader = new FileReader();
-
-            reader.onload = function(e) {
-                // preview file
-                document.getElementById("preview_foto").src = e.target.result;
-            };
-            // membaca file sebagai data URL
-            reader.readAsDataURL(this.files[0]);
-        }
-    };
-</script>

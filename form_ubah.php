@@ -1,3 +1,8 @@
+<?php
+// Deklarasi strict types
+declare(strict_types=1);
+?>
+
 <div class="d-flex flex-column flex-lg-row mt-5 mb-4">
     <!-- judul halaman -->
     <div class="flex-grow-1 d-flex align-items-center">
@@ -24,7 +29,7 @@ if (isset($_GET['id'])) {
 
     // sql statement untuk menampilkan data dari tabel "tbl_siswa" berdasarkan "id_siswa"
     $query = $mysqli->query("SELECT * FROM tbl_siswa WHERE id_siswa='$id_siswa'")
-                             or die('Ada kesalahan pada query tampil data : ' . $mysqli->error);
+                            or die("Ada kesalahan pada query tampil data : {$mysqli->error}");
     // ambil data hasil query
     $data = $query->fetch_assoc();
 }
@@ -42,12 +47,12 @@ if (isset($_GET['id'])) {
                 <div class="row g-0">
                     <div class="mb-3 col-xl-6 pe-xl-3">
                         <label class="form-label">ID Siswa <span class="text-danger">*</span></label>
-                        <input type="text" name="id_siswa" class="form-control" value="<?php echo $data['id_siswa']; ?>" readonly>
+                        <input type="text" name="id_siswa" class="form-control" value="<?= $data['id_siswa'] ?>" readonly>
                     </div>
 
                     <div class="mb-3 col-xl-6 pe-xl-3">
                         <label class="form-label">Tanggal Daftar <span class="text-danger">*</span></label>
-                        <input type="text" name="tanggal_daftar" class="form-control datepicker" autocomplete="off" value="<?php echo date('d-m-Y', strtotime($data['tanggal_daftar'])); ?>" required>
+                        <input type="text" name="tanggal_daftar" class="form-control datepicker" autocomplete="off" value="<?= date('d-m-Y', strtotime($data['tanggal_daftar'])) ?>" required>
                         <div class="invalid-feedback">Tanggal daftar tidak boleh kosong.</div>
                     </div>
                 </div>
@@ -57,7 +62,7 @@ if (isset($_GET['id'])) {
                 <div class="mb-3 ps-xl-3">
                     <label class="form-label">Kelas <span class="text-danger">*</span></label>
                     <select name="kelas" class="form-select" autocomplete="off" required>
-                        <option value="<?php echo $data['kelas']; ?>"><?php echo $data['kelas']; ?></option>
+                        <option value="<?= $data['kelas'] ?>"><?= $data['kelas'] ?></option>
                         <option disabled value="">-- Pilih --</option>
                         <option value="Data Analysis">Data Analysis</option>
                         <option value="Digital Marketing">Digital Marketing</option>
@@ -77,53 +82,45 @@ if (isset($_GET['id'])) {
             <div class="col-xl-6">
                 <div class="mb-3 pe-xl-3">
                     <label class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
-                    <input type="text" name="nama_lengkap" class="form-control" autocomplete="off" value="<?php echo $data['nama_lengkap']; ?>" required>
+                    <input type="text" name="nama_lengkap" class="form-control" autocomplete="off" value="<?= $data['nama_lengkap'] ?>" required>
                     <div class="invalid-feedback">Nama lengkap tidak boleh kosong.</div>
                 </div>
 
                 <div class="mb-4 pe-xl-3">
                     <label class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
                     <br>
-                    <?php
-                    if ($data['jenis_kelamin'] == 'Laki-laki') { ?>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="laki_laki" name="jenis_kelamin" class="form-check-input" value="Laki-laki" checked required>
+                    <div class="d-flex">
+                        <?php
+                        $jenis_kelamin = $data['jenis_kelamin'] ?? '';
+                        ?>
+
+                        <div class="form-check me-4">
+                            <input type="radio" id="laki_laki" name="jenis_kelamin" class="form-check-input" value="Laki-laki" <?= ($jenis_kelamin === 'Laki-laki') ? 'checked' : '' ?> required>
                             <label class="form-check-label" for="laki_laki">Laki-laki</label>
                         </div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="perempuan" name="jenis_kelamin" class="form-check-input" value="Perempuan" required>
+
+                        <div class="form-check">
+                            <input type="radio" id="perempuan" name="jenis_kelamin" class="form-check-input" value="Perempuan" <?= ($jenis_kelamin === 'Perempuan') ? 'checked' : '' ?> required>
                             <label class="form-check-label" for="perempuan">Perempuan</label>
                             <div class="invalid-feedback invalid-feedback-inline">Pilih salah satu jenis kelamin.</div>
                         </div>
-                    <?php
-                    } else { ?>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="laki_laki" name="jenis_kelamin" class="form-check-input" value="Laki-laki" required>
-                            <label class="form-check-label" for="laki_laki">Laki-laki</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input type="radio" id="perempuan" name="jenis_kelamin" class="form-check-input" value="Perempuan" checked required>
-                            <label class="form-check-label" for="perempuan">Perempuan</label>
-                            <div class="invalid-feedback invalid-feedback-inline">Pilih salah satu jenis kelamin.</div>
-                        </div>
-                    <?php } ?>
+                    </div>
                 </div>
 
                 <div class="mb-3 pe-xl-3">
                     <label class="form-label">Alamat <span class="text-danger">*</span></label>
-                    <textarea name="alamat" rows="2" class="form-control" autocomplete="off" required><?php echo $data['alamat']; ?></textarea>
+                    <textarea name="alamat" rows="2" class="form-control" autocomplete="off" required><?= $data['alamat'] ?></textarea>
                     <div class="invalid-feedback">Alamat tidak boleh kosong.</div>
                 </div>
 
                 <div class="mb-3 pe-xl-3">
                     <label class="form-label">Email <span class="text-danger">*</span></label>
-                    <input type="email" name="email" class="form-control" autocomplete="off" value="<?php echo $data['email']; ?>" required>
+                    <input type="email" name="email" class="form-control" autocomplete="off" value="<?= $data['email'] ?>" required>
                     <div class="invalid-feedback">Email tidak boleh kosong.</div>
                 </div>
-
                 <div class="mb-3 pe-xl-3">
                     <label class="form-label">WhatsApp <span class="text-danger">*</span></label>
-                    <input type="text" name="whatsapp" class="form-control" maxlength="13" autocomplete="off" onKeyPress="return goodchars(event,'0123456789',this)" value="<?php echo $data['whatsapp']; ?>" required>
+                    <input type="text" name="whatsapp" class="form-control" maxlength="13" autocomplete="off" onkeydown="return allowChars(event, '0123456789')" value="<?= $data['whatsapp'] ?>" required>
                     <div class="invalid-feedback">WhatsApp tidak boleh kosong.</div>
                 </div>
             </div>
@@ -131,10 +128,10 @@ if (isset($_GET['id'])) {
             <div class="col-xl-6">
                 <div class="mb-3 ps-xl-3">
                     <label class="form-label">Foto Profil</label>
-                    <input type="file" accept=".jpg, .jpeg, .png" id="foto" name="foto" class="form-control" autocomplete="off">
+                    <input type="file" accept=".jpg, .jpeg, .png" id="image" name="foto" class="form-control" autocomplete="off">
 
                     <div class="mt-4">
-                        <img id="preview_foto" src="images/<?php echo $data['foto_profil']; ?>" class="border border-2 img-fluid rounded-4 shadow-sm" alt="Foto Profil" width="240" height="240">
+                        <img id="preview-image" src="images/<?= basename($data['foto_profil']) ?>" class="border border-2 img-fluid rounded-4 shadow-sm" alt="Foto Profil" width="240" height="240" loading="lazy">
                     </div>
 
                     <div class="form-text mt-4">
@@ -156,43 +153,3 @@ if (isset($_GET['id'])) {
         </div>
     </form>
 </div>
-
-<script type="text/javascript">
-    // validasi file dan preview file sebelum diunggah
-    document.getElementById('foto').onchange = function() {
-        // mengambil value dari file
-        var fileInput = document.getElementById('foto');
-        var filePath = fileInput.value;
-        var fileSize = fileInput.files[0].size;
-        // tentukan extension file yang diperbolehkan
-        var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-
-        // Jika tipe file yang diunggah tidak sesuai dengan "allowedExtensions"
-        if (!allowedExtensions.exec(filePath)) {
-            alert("Tipe file tidak sesuai. Harap unggah file yang memiliki tipe *.jpg atau *.png.");
-            // reset input file
-            fileInput.value = "";
-            // tampilkan file default
-            document.getElementById("preview_foto").src = "images/img-default.png";
-        }
-        // jika ukuran file yang diunggah lebih dari 1 Mb
-        else if (fileSize > 1000000) {
-            alert("Ukuran file lebih dari 1 Mb. Harap unggah file yang memiliki ukuran maksimal 1 Mb.");
-            // reset input file
-            fileInput.value = "";
-            // tampilkan file default
-            document.getElementById("preview_foto").src = "images/img-default.png";
-        }
-        // jika file yang diunggah sudah sesuai, tampilkan preview file
-        else {
-            var reader = new FileReader();
-
-            reader.onload = function(e) {
-                // preview file
-                document.getElementById("preview_foto").src = e.target.result;
-            };
-            // membaca file sebagai data URL
-            reader.readAsDataURL(this.files[0]);
-        }
-    };
-</script>

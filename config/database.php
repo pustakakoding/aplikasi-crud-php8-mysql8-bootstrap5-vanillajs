@@ -1,16 +1,35 @@
 <?php
-// deklarasi parameter koneksi database
-$host     = "localhost";            // server database, default “localhost” atau “127.0.0.1”
-$username = "root";                 // username database, default “root”
-$password = "";                     // password database, default kosong
-$database = "db_crud_php";          // memilih database yang akan digunakan
+// Deklarasi strict types
+declare(strict_types=1);
 
-// buat koneksi database
-$mysqli = new mysqli($host, $username, $password, $database);
+// Konfigurasi database
+const DB_HOST = 'localhost';
+const DB_USER = 'root';
+const DB_PASS = '';
+const DB_NAME = 'db_crud_php_mysqli';  
 
-// cek koneksi
-// jika koneksi gagal 
-if ($mysqli->connect_error) {
-	// tampilkan pesan gagal koneksi
-    die('Koneksi Database Gagal : '.$mysqli->connect_error);
+// Error reporting
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+try {
+    // Koneksi database
+    $mysqli = new mysqli(
+        DB_HOST,
+        DB_USER,
+        DB_PASS,
+        DB_NAME
+    );
+
+    // Set charset
+    $mysqli->set_charset('utf8mb4');
+
+    // Set timezone (opsional)
+    $mysqli->query("SET time_zone = '+07:00'");
+
+} catch (mysqli_sql_exception $e) {
+    // Logging error
+    error_log($e->getMessage());
+
+    // Hentikan eksekusi dan tampilkan pesan
+    die("Koneksi database gagal.");
 }
